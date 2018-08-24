@@ -21,22 +21,26 @@ function splitStr(str,length){
 /**
  * 时间戳装换日期格式
  * @param timestamp
- * @returns {*}
+ * @param format
+ * @returns {string}
  */
-function timestampToTime(timestamp) {
-    var Y,M,D,h,m,s;
+function timestampToTime(timestamp,format = 'Y-M-D h:m:s') {
     var date = new Date(timestamp * 1000);//时间戳为10位需*1000，时间戳为13位的话不需乘1000
-    Y = date.getFullYear() + '-';
-    M = (date.getMonth()+1 < 10 ? '0'+(date.getMonth()+1) : date.getMonth()+1) + '-';
-    D = date.getDate() + ' ';
-    h = date.getHours() + ':';
-    m = date.getMinutes() + ':';
-    s = date.getSeconds();
-    return Y+M+D+h+m+s;
+    var datetime  = {};
+    datetime.Y = date.getFullYear();
+    datetime.M = (date.getMonth()+1 < 10 ? '0'+(date.getMonth()+1) : date.getMonth()+1);
+    datetime.D = date.getDate();
+    datetime.h = date.getHours();
+    datetime.m = date.getMinutes();
+    datetime.s = date.getSeconds();
+    return format.replace(/(\w{1})/g,function(){
+        var args = arguments;
+        return datetime[args[1]];
+    });
 }
 
 /**
- * axios的参数格式化
+ * axios的data参数格式化
  * @param $postData
  * @returns {*}
  */
