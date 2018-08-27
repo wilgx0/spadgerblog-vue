@@ -4,8 +4,8 @@ import Vue from 'vue'
 import App from './App'
 import router from './router'
 import axios from 'axios'
-import {Loading,Popup,Row,Col,PullRefresh,List,Search,Tabbar,TabbarItem,NavBar,Button} from 'vant'
-Vue.use(Loading).use(Popup).use(Row).use(Col).use(PullRefresh).use(List).use(Search).use(Tabbar).use(TabbarItem).use(NavBar).use(Button)
+import { Cell, CellGroup,Loading,Popup,Row,Col,PullRefresh,List,Search,Tabbar,TabbarItem,NavBar,Button} from 'vant'
+Vue.use(Cell).use(CellGroup).use(Loading).use(Popup).use(Row).use(Col).use(PullRefresh).use(List).use(Search).use(Tabbar).use(TabbarItem).use(NavBar).use(Button)
 
 Vue.config.productionTip = false
 /* eslint-disable no-new */

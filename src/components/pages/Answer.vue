@@ -1,30 +1,36 @@
 <template>
-  <div >
-     <van-search
-        v-model="searchValue"
-        placeholder="请输入搜索关键词"
-        show-action
-        @search="onSearch"
-      >
-        <div slot="action" @click="onSearch">搜索</div>
-      </van-search>
-      <p>answer.vue</p>
-  </div>
+    <div>
+        <van-search
+                v-model="searchValue"
+                placeholder="请输入搜索关键词"
+                show-action
+                @search="onSearch"
+        >
+            <div slot="action" @click="onSearch">搜索</div>
+        </van-search>
+        <article_list></article_list>
+    </div>
 </template>
 
 <script>
-export default {
-  data () {
-    return {
-      searchValue:'',
+    import List from '@/components/component/List.vue'
+
+    export default {
+        data() {
+            return {
+                searchValue: '',
+            }
+        },
+        methods: {
+            onSearch() {
+
+            }
+        },
+        components:{
+            article_list:List
+        }
+
     }
-  },
-  methods:{
-    onSearch(){
-      
-    }
-  }
-}
 </script>
 
 <style scoped>
