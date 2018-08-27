@@ -1,15 +1,23 @@
 <template>
     <div>
+        <van-search
+                v-model="searchValue"
+                placeholder="请输入搜索关键词"
+                show-action
+                @search="onSearch"
+        >
+            <div slot="action" @click="onSearch">搜索</div>
+        </van-search>
         <div class="list-content" id="list-content">
-            <van-pull-refresh v-model="isLoading" @refresh="onRefresh">
+            <van-pull-refresh v-model="article_isloading" @refresh="onRefresh">
                 <van-list
-                        v-model="loading"
-                        :finished="finished"
+                        v-model="article_loading"
+                        :finished="article_finished"
                         @load="onLoad"
                         :offset="10"
                 >
                     <div class="list-item">
-                        <van-cell v-for="item in list" :key="item" :title="item + ''" />
+                        <van-cell v-for="item in article_list" :key="item" :title="item + ''" />
                     </div>
 
                 </van-list>
@@ -23,22 +31,28 @@
     export default {
         data(){
             return {
+                searchValue: '',
                 list: [],
                 loading: false,   //是否处于加载状态
                 finished: false,  //是否已加载完所有数据
                 isLoading: false,   //是否处于下拉刷新状态
             }
         },
+        props:['article_list','article_loading','article_finished','article_isloading'],
         methods:{
-            onLoad() {      //上拉加载
+            onSearch() {            //搜索
+
+            },
+            onLoad() {              //上拉加载
                 setTimeout(() => {
-                    for (let i = 0; i < 15; i++) {
-                        this.list.push(this.list.length + 1);
-                    }
-                    this.loading = false;
-                    if (this.list.length >= 60) {
-                        this.finished = true;
-                    }
+                    this.$emit('article_load')
+                    // for (let i = 0; i < 15; i++) {
+                    //     this.list.push(this.list.length + 1);
+                    // }
+                    // this.loading = false;
+                    // if (this.list.length >= 60) {
+                    //     this.finished = true;
+                    // }
                 }, 500);
             },
             onRefresh() {       //下拉刷新

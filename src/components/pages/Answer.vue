@@ -1,14 +1,12 @@
 <template>
     <div>
-        <van-search
-                v-model="searchValue"
-                placeholder="请输入搜索关键词"
-                show-action
-                @search="onSearch"
-        >
-            <div slot="action" @click="onSearch">搜索</div>
-        </van-search>
-        <article_list></article_list>
+        <article_list
+                :article_list="list"
+                :article_loading = "loading"
+                :article_finished = "finished"
+                :article_isloading = "isLoading"
+                @article_load="onLoad"
+        ></article_list>
     </div>
 </template>
 
@@ -18,12 +16,27 @@
     export default {
         data() {
             return {
-                searchValue: '',
+                list:[],
+                loading: false,     //是否处于加载状态
+                finished: false,    //是否已加载完所有数据
+                isLoading: false,   //是否处于下拉刷新状态
             }
         },
         methods: {
             onSearch() {
 
+            },
+            onLoad(){               //上拉加载
+                //console.log('test')
+                setTimeout(() => {
+                    for (let i = 0; i < 15; i++) {
+                        this.list.push(this.list.length + 1);
+                    }
+                    this.loading = false;
+                    if (this.list.length >= 60) {
+                        this.finished = true;
+                    }
+                }, 500);
             }
         },
         components:{
