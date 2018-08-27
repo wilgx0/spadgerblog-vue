@@ -52,7 +52,7 @@
         },
         mounted(){
             let winHeight = document.documentElement.clientHeight                          //视口大小
-            document.getElementById('list-content').style.height = (winHeight - 50) +'px'  //调整上拉加载框高度
+            document.getElementById('list-content').style.height = (winHeight - 50 -44) +'px'  //调整上拉加载框高度
         }
     }
 </script>
