@@ -9,10 +9,10 @@
             <div slot="action" @click="onSearch">搜索</div>
         </van-search>
         <div class="list-content" id="list-content">
-            <van-pull-refresh v-model="article_isloading" @refresh="onRefresh">
+            <van-pull-refresh v-model="isLoading" @refresh="onRefresh">
                 <van-list
-                        v-model="article_loading"
-                        :finished="article_finished"
+                        v-model="loading"
+                        :finished="finished"
                         @load="onLoad"
                         :offset="10"
                 >
@@ -38,35 +38,28 @@
                 isLoading: false,   //是否处于下拉刷新状态
             }
         },
-        props:['article_list','article_loading','article_finished','article_isloading'],
+        props:['article_list','clipHeight'],
         methods:{
             onSearch() {            //搜索
 
             },
             onLoad() {              //上拉加载
                 setTimeout(() => {
-                    this.$emit('article_load')
-                    // for (let i = 0; i < 15; i++) {
-                    //     this.list.push(this.list.length + 1);
-                    // }
-                    // this.loading = false;
-                    // if (this.list.length >= 60) {
-                    //     this.finished = true;
-                    // }
+                    this.$emit('article_load',this)
                 }, 500);
             },
             onRefresh() {       //下拉刷新
                 setTimeout(() => {
-                    this.finished = false;
-                    this.isLoading = false;
-                    this.list = []
-                    this.onLoad()
+                    this.finished = false
+                    this.isLoading = false
+                    this.$emit('clear_list')
+                  //  this.onLoad()
                 }, 500);
             }
         },
         mounted(){
             let winHeight = document.documentElement.clientHeight                          //视口大小
-            document.getElementById('list-content').style.height = (winHeight - 50 -44) +'px'  //调整上拉加载框高度
+            document.getElementById('list-content').style.height = (winHeight - this.clipHeight - 44) +'px'  //调整上拉加载框高度
         }
     }
 </script>
