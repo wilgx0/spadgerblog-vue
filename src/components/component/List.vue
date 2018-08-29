@@ -16,10 +16,7 @@
                         @load="onLoad"
                         :offset="10"
                 >
-                    <div class="list-item">
-                        <van-cell v-for="item in article_list" :key="item" :title="item + ''" />
-                    </div>
-
+                    <slot name="list_item"></slot>
                 </van-list>
             </van-pull-refresh>
         </div>
@@ -38,10 +35,10 @@
                 isLoading: false,   //是否处于下拉刷新状态
             }
         },
-        props:['article_list','clipHeight'],
+        props:['clipHeight'],
         methods:{
             onSearch() {            //搜索
-
+                this.$emit('onSearch',this.searchValue)
             },
             onLoad() {              //上拉加载
                 setTimeout(() => {
@@ -59,7 +56,9 @@
         },
         mounted(){
             let winHeight = document.documentElement.clientHeight                          //视口大小
-            document.getElementById('list-content').style.height = (winHeight - this.clipHeight - 44) +'px'  //调整上拉加载框高度
+            let loadHeight = winHeight - this.clipHeight - 44
+            document.getElementById('list-content').style.height = loadHeight +'px'         //调整上拉加载框容器高度
+
         }
     }
 </script>
@@ -67,8 +66,5 @@
 <style scoped>
     .list-content{
         overflow:scroll;
-    }
-    .list-item{
-        text-align:center;
     }
 </style>

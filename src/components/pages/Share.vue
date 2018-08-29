@@ -1,13 +1,20 @@
 <template>
     <div class='share'>
-        <van-search
-                v-model="searchValue"
-                placeholder="请输入搜索关键词"
-                show-action
-                @search="onSearch"
-        >
-            <div slot="action" @click="onSearch">{{searchBtnText}}</div>
-        </van-search>
+        <div class="head">
+            <div class="head-left" @click="records"><van-icon name="records" /><span>分享</span></div>
+            <div class="head-right">
+                <van-search
+                        v-model="searchValue"
+                        placeholder="请输入搜索关键词"
+                        show-action
+                        @search="onSearch"
+                >
+                    <div slot="action" @click="onSearch">{{searchBtnText}}</div>
+                </van-search>
+            </div>
+
+        </div>
+
 
         <div class="list-content" id="list-content">
             <van-pull-refresh v-model="isLoading" @refresh="onRefresh">
@@ -27,7 +34,9 @@
                         <van-row>
                             <van-col span="10">{{item.user.user_nickname|splitStr(10)}}</van-col>
                             <van-col span="7">{{item.published_time|published_time_format}}</van-col>
-                            <van-col span="7">{{item.post_hits>0 ? item.post_hits:'0'}}次阅读</van-col>
+                            <div class="read">
+                                <van-col span="7">{{item.post_hits>0 ? item.post_hits:'0'}}次阅读</van-col>
+                            </div>
                         </van-row>
                     </div>
 
@@ -102,6 +111,9 @@
             }
         },
         methods: {
+            records(){                  //跳转提交分享文章页面
+               this.$router.push({name:'SharePage'})
+            },
             showDetails(id) {          //显示文章详情
                 this.articleloading = true
                 this.ArticleData = {}
@@ -151,6 +163,7 @@
                         params: {
                             page: ++this.current_page,
                             key:this.searchValue,       //查询关键字
+                            articleType:1,              //文章类型
                         }
                     }).then(response => {
                         this.loading = false;
@@ -204,6 +217,25 @@
 
 <style lang='less' scoped>
     .share {
+        .head{
+            display:flex;
+            align-items:center;
+            .head-left{
+                flex:1.6;
+                font-size: 14px;
+                background-color:rgb(242, 242, 242);
+                height: 44px;
+                line-height: 44px;
+                text-indent: 0.2rem;
+                & > i {
+                    top: 0.1rem;
+                    left: -0.1rem;
+                }
+            }
+            .head-right{
+                flex:8.4;
+            }
+        }
         .list-content {
             overflow: scroll;
             .list-item {
@@ -215,6 +247,9 @@
                     color: #2e3135;
                     font-weight: bold;
                     margin-bottom: 1rem;
+                }
+                .read{
+                    text-align:right;
                 }
             }
         }
