@@ -22,7 +22,7 @@
         data() {
             return {
                 content: '',
-                editHeight:0,
+                editHeight:400,
             }
         },
         methods:{

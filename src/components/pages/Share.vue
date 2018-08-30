@@ -112,7 +112,8 @@
         },
         methods: {
             records(){                  //跳转提交分享文章页面
-               this.$router.push({name:'SharePage'})
+                this.$router.push({name:'Login'})
+               //this.$router.push({name:'SharePage'})
             },
             showDetails(id) {          //显示文章详情
                 this.articleloading = true

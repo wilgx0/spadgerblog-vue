@@ -5,6 +5,7 @@ import Share from '@/components/pages/Share'
 import Answer from '@/components/pages/Answer'
 import My from '@/components/pages/My'
 import SharePage from '@/components/pages/SharePage'
+import Login from '@/components/pages/Login'
 
 Vue.use(Router)
 
@@ -26,9 +27,14 @@ export default new Router({
             ]
         },
         {
-            path:'/SharePage',
+            path:'/SharePage',      //添加文章页面
             name:'SharePage',
             component:SharePage,
+        },
+        {
+            path:'/Login',          //登录
+            name:'Login',
+            component:Login,
         }
 
     ]
