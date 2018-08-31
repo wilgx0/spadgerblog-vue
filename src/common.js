@@ -1,4 +1,62 @@
 import qs from 'qs'
+import axios from 'axios'
+import url from '@/serviceAPI.config.js'
+
+
+/**
+ * 检查用户登录状态
+ */
+function isLogin(){
+    return new Promise(function(resolve,reject){
+        let {token,device} = getToken()
+        if(token && device){
+            axios({
+                url:url.isLogin,
+                method:'get',
+                headers:{
+                    'XX-Token':token ? token : '',
+                    'XX-Device-Type':device ? device : '',
+                }
+            }).then(response=>{
+                if(response.status == 200 ){
+                    if(response.data.code && response.data.code == 10001){
+                        resolve(1)          //用户未登录
+                    } else {
+                        resolve(2)          //登录状态正常
+                    }
+                } else {
+                    resolve(3)              //网络或服务器问题
+                }
+            }).catch(err=>{
+                reject(4)
+            })
+        } else {
+            resolve(5)                      //token等用户信息不存在
+        }
+    })
+}
+
+/**
+ * 获取用户token
+ * @returns {{"XX-Token": string, "XX-Device-Type": string}}
+ */
+function getToken(){
+    let  token  =  localStorage.getItem('XX-Token')
+    let device  = localStorage.getItem('XX-Device-Type')
+    let user = localStorage.getItem('user')
+    if(token && device && user){
+        return {
+            token,
+            device,
+            user,
+        }
+    } else {
+        return false
+    }
+
+
+}
+
 
 
 /**
@@ -21,7 +79,7 @@ function splitStr(str,length){
 /**
  * 时间戳装换日期格式
  * @param timestamp
- * @param format
+ * @param format   ('Y/M/D' 或 'Y年M月D日')
  * @returns {string}
  */
 function timestampToTime(timestamp,format = 'Y-M-D h:m:s') {
@@ -52,4 +110,6 @@ export default {
     splitStr,
     timestampToTime,
     stringify,
+    isLogin,
+    getToken,
 }

@@ -71,6 +71,7 @@
     import url from '@/serviceAPI.config.js'
     import Tool from '@/common.js'
     import { Toast } from 'vant'
+    import {mapGetters} from 'vuex'
 
     export default {
         data() {
@@ -112,8 +113,18 @@
         },
         methods: {
             records(){                  //跳转提交分享文章页面
-                this.$router.push({name:'Login'})
-               //this.$router.push({name:'SharePage'})
+                if(this.isLogin){
+                    this.$router.push({name:'SharePage'})
+                } else {
+                    (async ()=>{
+                        let ret = await Tool.isLogin()
+                        if(ret == 2){
+                            this.$router.push({name:'SharePage'})
+                        } else {
+                            this.$router.push({name:'Login'})
+                        }
+                    })()
+                }
             },
             showDetails(id) {          //显示文章详情
                 this.articleloading = true
@@ -212,6 +223,9 @@
             let loadHeight = winHeight - headHeight - footHeight;                              //视口高度减去头部和底部的高度
             document.getElementById('list-content').style.height = loadHeight + 'px'            //设置上拉加载框最小高度
             this.itemHeight = loadHeight / pageSize + 5                                         //设置列表框每一行的最小高度
+        },
+        computed:{
+            ...mapGetters(['isLogin']),
         }
     };
 </script>
