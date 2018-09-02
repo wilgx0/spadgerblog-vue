@@ -1,10 +1,12 @@
 <template>
     <div class="answer">
         <article_list
-                :clipHeight="50"
+                clipHeight="50"
+                headLeftName = "提问"
                 @article_load="onLoad"
                 @clear_list = 'onClearList'
                 @onSearch = 'onSearch'
+                @onHeadLeft = 'onHeadLeft'
         >
             <div slot="list_item">
                 <div v-for="(item,index) in list" :key="index" :style="{minHeight:itemHeight + 'px'}" class="list-item">
@@ -40,6 +42,9 @@
             }
         },
         methods: {
+            onHeadLeft(){                           //提交问题
+                console.log('test')
+            },
             onSearch(value){                    //搜索
                 this.searchValue = value
                 console.log(this.searchValue)

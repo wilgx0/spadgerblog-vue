@@ -45,6 +45,11 @@
             }
         },
         methods:{
+            clearData(){
+                this.title= ''
+                this.content = '请输入文章内容'
+                this.excerpt = ''
+            },
             onClickLeft(){          //返回上一页
                 this.$router.go(-1)
             },
@@ -52,7 +57,7 @@
                 this.content = e;
                 //console.info(e);
             },
-            onClickRight(){
+            onClickRight(){                     //发布文章
                 if(this.content == '' || this.title == ''){
                     Toast.fail('文章标记及内容不能为空')
                     return
@@ -85,7 +90,7 @@
                             return;
                         }
                         Toast.success(data.msg)
-                        //清空表单
+                        this.clearData()
                     }) .catch(err=>{
                         console.log(err)
                     })

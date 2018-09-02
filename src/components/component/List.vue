@@ -1,13 +1,20 @@
 <template>
-    <div>
-        <van-search
-                v-model="searchValue"
-                placeholder="请输入搜索关键词"
-                show-action
-                @search="onSearch"
-        >
-            <div slot="action" @click="onSearch">搜索</div>
-        </van-search>
+    <div class="my-list">
+        <div class="head">
+            <div class="head-left" @click="onHeadLeft"><van-icon name="records" /><span>{{headLeftName}}</span></div>
+            <div class="head-right">
+                <van-search
+                        v-model="searchValue"
+                        placeholder="请输入搜索关键词"
+                        show-action
+                        @search="onSearch"
+                >
+                    <div slot="action" @click="onSearch">搜索</div>
+                </van-search>
+            </div>
+
+        </div>
+
         <div class="list-content" id="list-content">
             <van-pull-refresh v-model="isLoading" @refresh="onRefresh">
                 <van-list
@@ -35,8 +42,11 @@
                 isLoading: false,   //是否处于下拉刷新状态
             }
         },
-        props:['clipHeight'],
+        props:['clipHeight','headLeftName'],
         methods:{
+            onHeadLeft(){
+                this.$emit('onHeadLeft')
+            },
             onSearch() {            //搜索
                 this.$emit('onSearch',this.searchValue)
             },
@@ -63,8 +73,30 @@
     }
 </script>
 
-<style scoped>
-    .list-content{
-        overflow:scroll;
+<style lang="less" scoped>
+    .my-list{
+        .head{
+            display:flex;
+            align-items:center;
+            .head-left{
+                flex:1.6;
+                font-size: 14px;
+                background-color:rgb(242, 242, 242);
+                height: 44px;
+                line-height: 44px;
+                text-indent: 0.2rem;
+                & > i {
+                    top: 0.1rem;
+                    left: -0.1rem;
+                }
+            }
+            .head-right{
+                flex:8.4;
+            }
+        }
+        .list-content{
+            overflow:scroll;
+        }
     }
+
 </style>
