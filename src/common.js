@@ -1,7 +1,7 @@
 import qs from 'qs'
 import axios from 'axios'
 import url from '@/serviceAPI.config.js'
-
+import { Toast } from 'vant'
 
 /**
  * 检查用户登录状态
@@ -106,10 +106,33 @@ function stringify($postData){
     return qs.stringify($postData);
 }
 
+/**
+ * 处理Axios返回的数据
+ */
+function getAxiosData(response){
+    if(response.status != 200){
+        Toast.fail('网络错误，未能请求到数据!')
+        return false
+    }
+    let data = response.data
+    if (data.code != 1) {
+        if(data.msg) {
+            Toast.fail(data.msg)
+        } else {
+            Toast.fail('服务器错误，未能请求到数据!')
+        }
+        return false
+    }
+    return data
+}
+
+
+
 export default {
     splitStr,
     timestampToTime,
     stringify,
     isLogin,
     getToken,
+    getAxiosData,
 }

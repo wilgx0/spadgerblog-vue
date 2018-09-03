@@ -9,7 +9,7 @@
                 @onHeadLeft = 'onHeadLeft'
         >
             <div slot="list_item">
-                <div v-for="(item,index) in list" :key="index" :style="{minHeight:itemHeight + 'px'}" class="list-item">
+                <div v-for="(item,index) in list" :key="index" :style="{minHeight:itemHeight + 'px'}" class="list-item" @click="showAnswerDetails(item.id)">
                     <van-row >
                         <div class="title">
                             <van-col span="18">{{item.post_title|splitStr(25)}}</van-col>
@@ -17,7 +17,6 @@
                         <div class="answer-right">
                             <van-col span="6"><em>已回答</em></van-col>
                         </div>
-
                     </van-row>
                 </div>
             </div>
@@ -30,7 +29,7 @@
     import url from '@/serviceAPI.config.js'
     import { Toast } from 'vant'
     import Tool from '@/common.js'
-
+    import {mapGetters} from 'vuex'
 
     export default {
         data() {
@@ -43,13 +42,27 @@
         },
         methods: {
             onHeadLeft(){                           //提交问题
-                console.log('test')
+                if(this.isLogin){
+                    this.$router.push({name:'AnswerPage'})
+                } else {
+                    (async ()=>{
+                        let ret = await Tool.isLogin()
+                        if(ret == 2){
+                            this.$router.push({name:'AnswerPage'})
+                        } else {
+                            this.$router.push({name:'Login'})
+                        }
+                    })()
+                }
+            },
+            showAnswerDetails(id){            //显示详情页面
+               this.$router.push({name:'AnswerDetails',params:{id:id}})
             },
             onSearch(value){                    //搜索
                 this.searchValue = value
                 console.log(this.searchValue)
             },
-            onClearList(){
+            onClearList(){                      //清空列表
                 this.list = [];
             },
             onLoad(el){               //上拉加载
@@ -103,6 +116,9 @@
             let winHeight = document.documentElement.clientHeight                               //视口高度
             let loadHeight = winHeight - 50 - 44;                              //下拉加载容器高度
             this.itemHeight = loadHeight / pageSize + 5                          //分页条目高度
+        },
+        computed:{
+            ...mapGetters(['isLogin']),
         }
     }
 </script>

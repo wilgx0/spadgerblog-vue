@@ -5,7 +5,9 @@ import Share from '@/components/pages/Share'
 import Answer from '@/components/pages/Answer'
 import My from '@/components/pages/My'
 import SharePage from '@/components/pages/SharePage'
+import AnswerPage from '@/components/pages/AnswerPage'
 import Login from '@/components/pages/Login'
+import AnswerDetails from '@/components/pages/AnswerDetails'
 
 Vue.use(Router)
 
@@ -35,6 +37,16 @@ export default new Router({
             path:'/Login',          //登录
             name:'Login',
             component:Login,
+        },
+        {
+            path:'/AnswerPage',       //提交提问页面
+            name:'AnswerPage',
+            component:AnswerPage,
+        },
+        {
+            path:'/AnswerDetails',
+            name:'AnswerDetails',
+            component:AnswerDetails,
         }
 
     ]

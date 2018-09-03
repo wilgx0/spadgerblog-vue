@@ -77,15 +77,15 @@
         data() {
             return {
                 searchBtnText:'搜索',
-                searchValue: "",          //搜索关键字
-                list: [],                 //数据列表
-                loading: false,           //是否处于加载状态
-                finished: false,          //是否已加载完所有数据
-                isLoading: false,         //是否处于下拉刷新状态
-                current_page: 0,            //当前页数
-                itemHeight: 0,              //数据列表中各项的高度
-                showArticle: false,         //文章页面的显示
-                ArticleData:{},             //文章详情
+                searchValue: "",            //搜索关键字
+                list: [],                   //数据列表
+                loading: false,             //是否处于加载状态
+                finished: false,            //是否已加载完所有数据
+                isLoading: false,           //是否处于下拉刷新状态
+                current_page: 0,             //当前页数
+                itemHeight: 0,               //数据列表中各项的高度
+                showArticle: false,          //文章页面的显示
+                ArticleData:{},              //文章详情
                 articleloading:false,        //文章加载框的显示
             };
         },

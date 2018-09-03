@@ -6,6 +6,8 @@ const URL = {
     isLogin:LOCALURL + '/api/user/public/getUserId',              //判断用户是否登录
     login:LOCALURL + '/api/user/public/login',                      //用户登录
     addAtricles:LOCALURL + '/api/portal/Articles',                 //添加文章
+    addComments:LOCALURL + '/api/user/comments',                  //添加评论
+    getCommentList:LOCALURL + '/api/user/comments',                                   //获取评论列表
 }
 
 module.exports = URL
