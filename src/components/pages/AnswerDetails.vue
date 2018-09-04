@@ -2,14 +2,28 @@
     <div class="answer-details">
         <van-nav-bar title="问题详情" left-text="返回" @click-left="$router.go(-1)" left-arrow fixed></van-nav-bar>
         <div class="content">
-            <h1>
-                标题
-            </h1>
-            <div class="describe">
-                描述
+            <div>
+                <h2>{{ArticleData.post_title}}</h2>
             </div>
-            <van-button type="primary" @click="showAnswer">我来回答</van-button>
+
+            <div>
+                {{ArticleData.post_content}}
+            </div>
+
+            <div>
+                <van-button type="primary" @click="showAnswer">我来回答</van-button>
+            </div>
+
+            <div>
+                246条回答
+            </div>
+
+            <div class="comment-list">
+
+            </div>
         </div>
+
+        <!--回答问题的界面-->
         <van-popup v-model="answerShow" position="right">
             <van-nav-bar title="回答问题"
                          left-text="返回"
@@ -43,15 +57,16 @@
             return {
                 answerShow:false,
                 answerData:'',          //回答的内容
-                content: '选填，请详细描述您的问题',
+                content: '请填写回答内容',
                 editHeight:400,         //编辑器的高度
                 loadingShow:false,      //加载图标的显示
                 commentList:[],          //评论列表
+                ArticleData:{},          //文章详情
             }
         },
         methods:{
             clearData(){
-                this.content = '选填，请详细描述您的问题'
+                this.content = '请填写回答内容'
             },
             updateData(e = ''){
                 this.content = e;
@@ -83,7 +98,6 @@
                     },
                 }).then(response=>{
                     this.loadingShow = false
-
                     let data = Tool.getAxiosData(response)
                     Toast.success(data.msg)
                     this.clearData()
@@ -115,31 +129,38 @@
                 })
 
             },
-            getCommentById(){               //根据文章id获取评论
-
+            getArticleById(){               //根据id获取文章
+                return new Promise((resolve,reject)=>{
+                    this.$http({
+                        url:url.getArticleById,
+                        method:'get',
+                        params:{
+                            id :this.$route.params.id
+                        }
+                    }).then(response=>{
+                        //let data = Tool.getAxiosData(response)
+                        resolve(response)
+                    }).catch(err=>{
+                        reject(err)
+                    })
+                })
             }
         },
         created(){
             let winHeight = document.documentElement.clientHeight
             this.editHeight = winHeight - 38 - 46;
-            //获取评论的相关内容
             (async () =>{
-                let response = await this.getCommentList(this.$route.params.id)
-                if(response.status != 200){
-                    Toast.fail('网络错误，未能请求到数据!')
-                    return
-                }
-                let data = response.data
-                if (data.code != 1) {
-                    if(data.msg){
-                        Toast.fail(data.msg)
-                    } else {
-                        Toast.fail('服务器错误，未能请求到数据!')
-                    }
-                    return
-                }
-                this.commentList = data.data[0]
-                console.log(this.commentList)
+                //获取文章的信息
+                let ArticleData = await this.getArticleById()
+                ArticleData = Tool.getAxiosData(ArticleData)
+                this.ArticleData = ArticleData.data
+                //获取评论的相关内容
+                let commentList = await this.getCommentList(this.$route.params.id)
+                commentList = Tool.getAxiosData(commentList)
+                this.commentList = commentList.data[0]
+
+                // console.log(this.ArticleData)
+                // console.log(this.commentList)
             })()
         }
     }
@@ -150,7 +171,22 @@
         .content{
             margin-top:46px;
             padding:1rem;
-
+            color:#333;
+            div:nth-child(1){
+                line-height:38px;
+                font-size:24px;
+                h2{
+                    margin:0px;
+                }
+            }
+            div:nth-child(2){
+                line-height:38px;
+                font-size:18px;
+            }
+            div:nth-child(4) {
+                font-size:16px;
+                line-height:44px;
+            }
         }
         .van-popup{
             &--right {

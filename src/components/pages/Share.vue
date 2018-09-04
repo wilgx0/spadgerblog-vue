@@ -137,16 +137,7 @@
                         id :id
                     }
                 }).then(response=>{
-                    //console.log(response);
-                    if(response.status != 200){
-                        Toast.fail('网络错误，未能请求到数据!');
-                        return;
-                    }
-                    let data = response.data
-                    if (data.code != 1) {
-                        Toast.fail('服务器错误，未能请求到数据!');
-                        return;
-                    }
+                    let data = Tool.getAxiosData(response)
                     this.ArticleData = data.data
                     this.articleloading = false
                 }).catch(err=>{
