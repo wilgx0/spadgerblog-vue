@@ -78,8 +78,8 @@ function splitStr(str,length){
 
 /**
  * 时间戳装换日期格式
- * @param timestamp
- * @param format   ('Y/M/D' 或 'Y年M月D日')
+ * @param timestamp         时间戳
+ * @param format            显示的格式 ('Y/M/D' 或 'Y年M月D日')
  * @returns {string}
  */
 function timestampToTime(timestamp,format = 'Y-M-D h:m:s') {

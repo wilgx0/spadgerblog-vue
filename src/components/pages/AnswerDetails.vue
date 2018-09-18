@@ -6,21 +6,28 @@
                 <h2>{{ArticleData.post_title}}</h2>
             </div>
 
-            <div>
-                {{ArticleData.post_content}}
-            </div>
+            <div v-html="ArticleData.post_content"></div>
 
             <div>
                 <van-button type="primary" @click="showAnswer">我来回答</van-button>
             </div>
 
-            <div>
+            <div class="answer-count">
                 246条回答
             </div>
 
+            <!--回答列表-->
             <div class="comment-list">
-
+                <ul>
+                    <li v-for="(v,i) in commentList" :key="i">
+                        <p>{{v.user.user_nickname}}</p>
+                        <p>{{v.user.create_time|timestampToTime}}</p>
+                        <p>{{v.content}}</p>
+                        <p><van-icon name="like-o" /></p>
+                    </li>
+                </ul>
             </div>
+
         </div>
 
         <!--回答问题的界面-->
@@ -63,6 +70,11 @@
                 commentList:[],          //评论列表
                 ArticleData:{},          //文章详情
             }
+        },
+        filters:{
+            timestampToTime(value){          //日期格式化
+                return Tool.timestampToTime(value)
+            },
         },
         methods:{
             clearData(){
@@ -117,7 +129,7 @@
                         url:url.getCommentList,
                         method:'get',
                         params:{
-                            page: currentPage + ',10',
+                            page: currentPage + ',5',
                             object_id: object_id,
                             table_name:'portal_post'
                         },
@@ -157,10 +169,11 @@
                 //获取评论的相关内容
                 let commentList = await this.getCommentList(this.$route.params.id)
                 commentList = Tool.getAxiosData(commentList)
-                this.commentList = commentList.data[0]
-
-                // console.log(this.ArticleData)
-                // console.log(this.commentList)
+               // console.log(commentList);
+                if(commentList.code == 1){
+                    this.commentList = commentList.data[0]
+                    console.log(this.commentList);
+                }
             })()
         }
     }
@@ -186,6 +199,32 @@
             div:nth-child(4) {
                 font-size:16px;
                 line-height:44px;
+            }
+            .answer-count{
+                border-bottom:1px solid #e0e0e0;
+            }
+            .comment-list{
+                color:#333;
+                ul {
+
+                    li{
+                        p{
+                            margin: 0.3rem 0;
+                        }
+                        & > p:nth-child(1){
+                            font-size:16px;
+                        }
+                        & > p:nth-child(2){
+                            font-size: 12px;
+                            color: #999;
+                        }
+                        & > p:nth-child(3){
+                            font-size: 18px;
+                        }
+                    }
+
+                }
+
             }
         }
         .van-popup{

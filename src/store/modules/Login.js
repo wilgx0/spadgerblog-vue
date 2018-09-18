@@ -4,6 +4,7 @@ import Tool from '@/common.js'
 
 const state ={
 	isLogin : false,   //标记用户是否登录
+    active  : 0,        //首页底部导航菜单的索引
 }
 
 const getters = {
