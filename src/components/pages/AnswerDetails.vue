@@ -13,19 +13,27 @@
             </div>
 
             <div class="answer-count">
-                246条回答
+                {{ArticleData.comment_count||0}}条回答
             </div>
 
             <!--回答列表-->
-            <div class="comment-list">
-                <ul>
-                    <li v-for="(v,i) in commentList" :key="i">
-                        <p>{{v.user.user_nickname}}</p>
-                        <p>{{v.user.create_time|timestampToTime}}</p>
-                        <p>{{v.content}}</p>
-                        <p><van-icon name="like-o" /></p>
-                    </li>
-                </ul>
+            <div class="comment">
+                <van-list
+                        v-model="loading"
+                        :finished="finished"
+                        @load="onLoad"
+                        :immediate-check = "false"
+                        :offset="50"
+                >
+                    <ul class="comment-list">
+                        <li v-for="(v,i) in commentList" :key="i">
+                            <p>{{v.user.user_nickname}}</p>
+                            <p>{{v.user.create_time|timestampToTime}}</p>
+                            <p>{{v.content}}</p>
+                            <p><van-icon name="like-o" /></p>
+                        </li>
+                    </ul>
+                </van-list>
             </div>
 
         </div>
@@ -69,6 +77,10 @@
                 loadingShow:false,      //加载图标的显示
                 commentList:[],          //评论列表
                 ArticleData:{},          //文章详情
+
+                loading: false,     //回答列表加载状态
+                finished: false,     //回答列表加载完成状态
+                currentPage:1,        //回答列表当前页
             }
         },
         filters:{
@@ -77,6 +89,20 @@
             },
         },
         methods:{
+            onLoad(){               //加载问题回答列表
+                (async ()=>{
+                    let commentList = await this.getCommentList(this.$route.params.id,this.currentPage++)
+                    commentList = Tool.getAxiosData(commentList)
+                    //console.log(commentList)
+                    if(commentList && commentList.code == 1 && commentList.data[0].length > 0){
+                        this.commentList = this.commentList.concat(commentList.data[0])
+                        //console.log(this.commentList)
+                    } else {
+                        this.finished = true
+                    }
+                    this.loading = false
+                })();
+            },
             clearData(){
                 this.content = '请填写回答内容'
             },
@@ -123,7 +149,7 @@
              * @param object_id         评论的文章的id
              * @param currentPage       当前页
              */
-            getCommentList(object_id,currentPage = 1){
+            getCommentList(object_id,currentPage){
                 return new Promise((resolve,reject)=>{
                     this.$http({
                         url:url.getCommentList,
@@ -141,7 +167,11 @@
                 })
 
             },
-            getArticleById(){               //根据id获取文章
+            /**
+             * 根据id获取文章
+             * @returns {Promise<any>}
+             */
+            getArticleById(){
                 return new Promise((resolve,reject)=>{
                     this.$http({
                         url:url.getArticleById,
@@ -150,7 +180,6 @@
                             id :this.$route.params.id
                         }
                     }).then(response=>{
-                        //let data = Tool.getAxiosData(response)
                         resolve(response)
                     }).catch(err=>{
                         reject(err)
@@ -166,15 +195,9 @@
                 let ArticleData = await this.getArticleById()
                 ArticleData = Tool.getAxiosData(ArticleData)
                 this.ArticleData = ArticleData.data
-                //获取评论的相关内容
-                let commentList = await this.getCommentList(this.$route.params.id)
-                commentList = Tool.getAxiosData(commentList)
-               // console.log(commentList);
-                if(commentList.code == 1){
-                    this.commentList = commentList.data[0]
-                    console.log(this.commentList);
-                }
             })()
+            //获取评论的相关内容
+            this.onLoad()
         }
     }
 </script>
@@ -203,18 +226,21 @@
             .answer-count{
                 border-bottom:1px solid #e0e0e0;
             }
-            .comment-list{
-                color:#333;
-                ul {
-
-                    li{
-                        p{
+            .comment{
+                .comment-list {
+                    color:#333;
+                    & > li{
+                        padding-bottom:1rem;
+                        & > p{
                             margin: 0.3rem 0;
+                            line-height:1rem;
                         }
                         & > p:nth-child(1){
+                            margin-bottom:0;
                             font-size:16px;
                         }
                         & > p:nth-child(2){
+                            margin-top:0;
                             font-size: 12px;
                             color: #999;
                         }
