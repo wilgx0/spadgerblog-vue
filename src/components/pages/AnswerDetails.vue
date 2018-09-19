@@ -30,7 +30,7 @@
                             <p>{{v.user.user_nickname}}</p>
                             <p>{{v.user.create_time|timestampToTime}}</p>
                             <p>{{v.content}}</p>
-                            <p><van-icon name="like-o" /></p>
+                            <p><van-icon name="like-o"  @click="zan(v.id)"/></p>
                         </li>
                     </ul>
                 </van-list>
@@ -89,6 +89,19 @@
             },
         },
         methods:{
+            zan(id){                  //回答点赞
+                let postData = Tool.stringify({
+                    id:id
+                })
+                this.$http({
+                    url:url.zan,
+                    method:'post',
+                    data:postData
+                }).then(response=>{
+                    let data = Tool.getAxiosData(response)
+                    console.log(data)
+                })
+            },
             onLoad(){               //加载问题回答列表
                 (async ()=>{
                     let commentList = await this.getCommentList(this.$route.params.id,this.currentPage++)

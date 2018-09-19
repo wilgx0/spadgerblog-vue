@@ -7,7 +7,8 @@ const URL = {
     login:LOCALURL + '/api/user/public/login',                      //用户登录
     addAtricles:LOCALURL + '/api/portal/Articles',                 //添加文章
     addComments:LOCALURL + '/api/user/comments',                  //添加评论
-    getCommentList:LOCALURL + '/api/user/comments',                                   //获取评论列表
+    getCommentList:LOCALURL + '/api/user/comments',                //获取评论列表
+    zan:LOCALURL + '/api/user/comments/zan',                       //点赞
 }
 
 module.exports = URL
