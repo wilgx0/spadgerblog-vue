@@ -1,7 +1,7 @@
 <template>
     <div class="answer-details">
-        <van-nav-bar title="问题详情" left-text="返回" @click-left="$router.go(-1)" left-arrow fixed></van-nav-bar>
-        <div class="content">
+        <van-nav-bar title="问题详情" left-text="返回" @click-left="$router.go(-1)" left-arrow :fixed="true"></van-nav-bar>
+        <div class="content" id="content">
             <div>
                 <h2>{{ArticleData.post_title}}</h2>
             </div>
@@ -30,7 +30,7 @@
                             <p>{{v.user.user_nickname}}</p>
                             <p>{{v.user.create_time|timestampToTime}}</p>
                             <p>{{v.content}}</p>
-                            <p><van-icon name="like-o"  @click="zan(v.id)"/></p>
+                            <p><van-icon name="like-o"  @click="zan(v.id)"/><span class="like-count">{{v.like_count}}</span></p>
                         </li>
                     </ul>
                 </van-list>
@@ -90,16 +90,18 @@
         },
         methods:{
             zan(id){                  //回答点赞
-                let postData = Tool.stringify({
-                    id:id
-                })
-                this.$http({
-                    url:url.zan,
-                    method:'post',
-                    data:postData
+                this.$http.get(url.zan,{
+                    params:{
+                        id:id
+                    }
                 }).then(response=>{
                     let data = Tool.getAxiosData(response)
-                    console.log(data)
+                    //console.log(data)
+                    if(data.code == 1) {
+                        Toast.success(data.msg)
+                    } else {
+                        Toast.fail(data.msg?data.msg:'点赞失败')
+                    }
                 })
             },
             onLoad(){               //加载问题回答列表
@@ -211,6 +213,10 @@
             })()
             //获取评论的相关内容
             this.onLoad()
+        },
+        mounted(){
+            let winHeight = document.documentElement.clientHeight
+            document.getElementById('content').style.height = (winHeight - 46) + "px";
         }
     }
 </script>
@@ -218,6 +224,7 @@
 <style lang="less" scoped>
     .answer-details{
         .content{
+            overflow: scroll;
             margin-top:46px;
             padding:1rem;
             color:#333;
@@ -261,7 +268,12 @@
                             font-size: 18px;
                         }
                     }
-
+                    .like-count{
+                        position: relative;
+                        top: -.3rem;
+                        left: .2rem;
+                        font-size: 16px;
+                    }
                 }
 
             }
