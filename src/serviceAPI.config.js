@@ -9,6 +9,7 @@ const URL = {
     addComments:LOCALURL + '/api/user/comments',                  //添加评论
     getCommentList:LOCALURL + '/api/user/comments',                //获取评论列表
     zan:LOCALURL + '/api/user/comments/zan',                       //点赞
+    register:LOCALURL + '/api/user/public/register',                      //注册
 }
 
 module.exports = URL

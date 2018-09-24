@@ -8,6 +8,8 @@ import SharePage from '@/components/pages/SharePage'
 import AnswerPage from '@/components/pages/AnswerPage'
 import Login from '@/components/pages/Login'
 import AnswerDetails from '@/components/pages/AnswerDetails'
+import Register from '@/components/pages/Register'
+
 
 Vue.use(Router)
 
@@ -47,6 +49,11 @@ export default new Router({
             path:'/AnswerDetails',
             name:'AnswerDetails',
             component:AnswerDetails,
+        },
+        {
+            path:'/Register',           //注册页面
+            name:'Register',
+            component:Register
         }
 
     ]

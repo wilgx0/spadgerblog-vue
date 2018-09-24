@@ -82,6 +82,8 @@
                     }) .catch(err=>{
                         console.log(err)
                     })
+                } else {
+                    this.$router.push({name:'Login'})
                 }
             },
         },

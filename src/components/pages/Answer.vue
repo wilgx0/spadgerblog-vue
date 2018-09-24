@@ -15,7 +15,14 @@
                             <van-col span="18">{{item.post_title|splitStr(25)}}</van-col>
                         </div>
                         <div class="answer-right">
-                            <van-col span="6"><em>已回答</em></van-col>
+                            <van-col span="6">
+                                <template v-if="item.comment_count > 0">
+                                    <em class="ok">已回答</em>
+                                </template>
+                                <template v-else>
+                                    <em class="no">待回答</em>
+                                </template>
+                            </van-col>
                         </div>
                     </van-row>
                 </div>
@@ -145,6 +152,9 @@
                     padding:3px;
                     color:#fff;
                     display:inline-block;
+                }
+                em.ok{
+                    background-color:darkgreen;
                 }
             }
         }
